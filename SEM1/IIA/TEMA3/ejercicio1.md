@@ -130,3 +130,92 @@ python 06_iterative_deepening_search.py --from-city ORIGEN --to DESTINO
 
 ## Solución
 
+### 1. Pareja origen–destino y subgrafo
+
+Se elige **Lugoj → Hirsova**, donde existe un único camino que conecta ambas ciudades:
+
+```
+Lugoj (70km) -> Mehadia (75km) -> Drobeta (120km) -> Craiova (138km) -> Pitesti (101km) -> Bucharest (85km) -> Urziceni (98km) -> Hirsova
+```
+
+En resumen, el camino encontrado por BFS, UCS, DFS, DLS(limit=7) e IDS fue el mismo, sumando 687km: 
+
+### 2. Tabla comparativa
+
+| Algoritmo       | Status  | Path (resumen)          | Depth (hops)  | Cost (km) | Expanded  | Generated |
+|-----------------|---------|-------------------------|---------------|-----------|-----------|-----------|
+| BFS             | success | Lugoj→…→Hirsova (único) | 7             | 687       | 15        | 38        |
+| UCS             | success | MISMA SOLUCION          | 7             | 687       | 15        | 39        |
+| DFS             | success | MISMA SOLUCION          | 7             | 687       | 13        | 34        |
+| DLS (limit 4)   | cutoff  | ERROR                   | —             | —         | 8         | 21        |
+| DLS (limit 7)   | success | MISMA SOLUCION          | 7             | 687       | 9         | 16        |
+| IDS             | success | MISMA SOLUCION          | 7             | 687       | 63        | 162       |
+ 
+Resultados al ejecutar:
+`pixi run python 02_breadth_first_search.py --from-city Lugoj --to Hirsova`
+```
+=== BFS ===
+Status:    success
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:     7 roads   Cost: 687 km   Expanded: 15   Generated: 38
+```
+`pixi run python 03_uniform_cost_search.py --from-city Lugoj --to Hirsova`
+```
+=== UCS ===
+Status:    success
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:     7 roads   Cost: 687 km   Expanded: 15   Generated: 39
+```
+`pixi run python 04_depth_first_search.py --from-city Lugoj --to Hirsova`
+```
+=== DFS ===
+Status:    success
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:     7 roads   Cost: 687 km   Expanded: 13   Generated: 34
+```
+`pixi run python 05_depth_limited_search.py --from-city Lugoj --to Hirsova --limit 4`
+```
+=== DLS --limit 4 ===
+Status:    cutoff
+Expanded:  8   Generated: 21
+```
+`pixi run python 05_depth_limited_search.py --from-city Lugoj --to Hirsova --limit 7`
+```
+=== DLS --limit 7 ===
+Status:    success
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:   ` 7 roads   Cost: 687 km   Expanded: 9   Generated: 16
+```
+`pixi run python 06_iterative_deepening_search.py --from-city Lugoj --to Hirsova`
+```
+=== IDS ===
+Status:    success   (last_limit=7)
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:     7 roads   Cost: 687 km   Expanded: 63   Generated: 162
+```
+
+### 3. Reporte de resultados
+
+**¿BFS encontró el camino con menos carreteras? ¿UCS el de menos km?**
+Sí a ambas, de hecho, encuentran exactamente la misma solución. La diferencia es el criterio de generación:
+Mientras BFS devuelve el camino de 7 carreteras (mínimo posible), UCS devuelve el camino de 687 km (mínimo costo).
+Desviarse por otro camino, por ejemplo Timisoara–Arad–Sibiu añade simultáneamente más hops y más km,
+así que para este ejemplo usar menos caminos o menos kilómetros es idéntico.
+
+Como nota adicional, quizás en la práctica no influya mucho usar más o menos carreteras (a menos que estas sean de paga),
+pero quizás en un sistema de metro donde cada trasbordo cuesta esfuerzo tiempo y atención del usuario, 
+podría ser de más utilidad dependiendo de lo que éste prefiera más.
+
+**¿Por qué DFS puede devolver un camino más largo aunque el grafo sea el mismo?**
+DFS siempre expande el nodo más profundo de la frontera, y solo retrocede al fallar en encontrar solución.
+En este caso, el subgrafo entre Lugoj e Hirsova siempre tiene bifurcaciones que terminaron en la solución óptima.
+Sin embargo, es importante notar que este es un caso especial ya que en un grafo con más ciclos o bifurcaciones tempranas fallidas,
+DFS podría devolver un camino no óptimo.
+
+**¿Con qué `--limit` DLS pasó de `cutoff` a solución?**
+Con `--limit 4` DLS corta la búsqueda (`cutoff`) antes de hallar solución porque la profundidad de ésta es 7 (mayor que el límite).
+Por razonamiento, intentando con `--limit 7` DLS sí encontraría (y encontró) la solución. Confirmando el enunciado:
+DLS solo puede tener éxito cuando `limit ≥ profundidad de la solución más superficial`.
+
+La relación entre los tres algoritmos es la expansión. IDS expande muchos más nodos en total que BFS ya que siempre halla la solución BFS pero reexpandiendo los nodos superficales.
+
