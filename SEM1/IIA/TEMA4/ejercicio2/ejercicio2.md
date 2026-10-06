@@ -176,16 +176,51 @@ Confirma nombres en `mexico_cities_graph.json` (campos `name`, `state`, `lat`,
 
 ### 1. Código
 
---
+- [find_route.py](find_route.py): Carga el JSON, arma el grafo no dirigido y corre A* con h = haversine al destino (haversine importada de `generate_mexico_graph.py`, sin regenerar nada).
+- [mexico_map.html](mexico_map.html): Panel *Route* (origen, destino, algoritmo, **Find route**) con puerto de A* a JavaScript. Pinta aristas y nodos de la ruta y muestra costo, hops y expandidos.
+- A* adaptado de `Búsqueda informada/project/search/astar.py`. El estado es el id entero.
 
 ### 2. README
 
---
+Agregado en `Mexico map/README.md` (sección *Route finding (A\*)*).
+
+```bash
+python3 find_route.py --from-city Tijuana --to Cancún
+python3 find_route.py --from-city Puebla --to "Guadalupe, Nuevo León"
+```
+Mapa: abrir `mexico_map.html`, escribir origen y destino, **Find route**. No correr `generate_mexico_graph.py` (sobrescribe la UI).
 
 ### 3. Evidencias
 
---
+Salida del CLI en [evidencias/cli.txt](evidencias/cli.txt) y capturas del mapa en `evidencias/`.
+
+| Pareja | Depth | Cost (km) | Expanded | Generated |
+|---|---|---|---|---|
+| Tijuana → Cancún (larga) | 125 | 4528.20 | 949 | 4886 |
+| Mexico City → Monterrey | 27 | 1041.87 | 428 | 2174 |
+| Guadalajara → Mérida | 70 | 1984.75 | 736 | 3769 |
+| Hermosillo → Oaxaca | 62 | 2361.45 | 408 | 2077 |
+
+El costo del CLI y el del mapa coinciden en todas. Capturas: [tijuana_cancun.png](evidencias/tijuana_cancun.png), [cdmx_monterrey.png](evidencias/cdmx_monterrey.png), [puebla_guadalupe.png](evidencias/puebla_guadalupe.png).
 
 ### 4. Reporte
 
---
+**¿Qué usaste como estado y cómo resolviste duplicados?**
+El id entero del nodo, porque el nombre no es único. El usuario puede escribir `Nombre`, `Nombre, Estado` o el id. Si el nombre es ambiguo se elige la ciudad más poblada y se avisa en la salida (CLI y panel del mapa). Ejemplo: Puebla → id 4 (Puebla) frente al id 580 (Baja California).
+
+**¿Por qué haversine es admisible aquí?**
+Las aristas del grafo valen su distancia haversine, y la línea recta entre dos puntos nunca es mayor que cualquier camino de aristas entre ellos (desigualdad del triángulo). Por eso h(n) nunca sobreestima el costo real y además es consistente, así que A* devuelve la ruta óptima en km.
+
+**Costo, hops y expandidos de la ruta larga (Tijuana → Cancún)**
+4528.20 km, 125 hops, 949 nodos expandidos (4886 generados).
+
+**Reto opcional**
+Misma pareja Tijuana → Cancún:
+
+| Algoritmo | Cost (km) | Depth | Expanded |
+|---|---|---|---|
+| A* | 4528.20 | 125 | 949 |
+| UCS (h = 0) | 4528.20 | 125 | 998 |
+| Greedy | 5528.64 | 106 | 141 |
+
+UCS y A* coinciden en costo y A* expande menos (949 vs 998). Greedy expande muy poco pero paga 1000 km más: ignora `g`.

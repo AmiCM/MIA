@@ -1,0 +1,9 @@
+
+# secrets
+.env
+**/.env
+*.env
+!.env.example
+
+# dataset clonado (se regenera con rag-app/scripts/build_corpus.py)
+SEM1/IIA/PROYECTO_FINAL/fragrance-database/

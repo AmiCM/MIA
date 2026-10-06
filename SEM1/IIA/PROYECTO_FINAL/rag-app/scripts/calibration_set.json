@@ -1,0 +1,33 @@
+{
+  "answerable": [
+    "¿Quién creó Angel de Mugler?",
+    "¿Qué notas de base tiene Angel?",
+    "¿Qué opina la gente de Black Opium?",
+    "¿En qué año salió Light Blue de Dolce&Gabbana?",
+    "¿Qué acordes principales tiene Sauvage?",
+    "¿Qué perfumista creó Sauvage de Dior?",
+    "¿Cuáles son los pros y contras de Black Orchid?",
+    "¿Qué tan duradero es Tobacco Vanille según la comunidad?",
+    "¿Quién creó La Vie Est Belle?",
+    "¿Para qué estación del año es mejor Light Blue?",
+    "¿Qué es la nota almizcle (musk)?",
+    "¿Qué dice la noticia sobre los perfumes sólidos?",
+    "¿Qué calificación tiene Eros de Versace?",
+    "¿Quién es Alberto Morillas?",
+    "¿Qué perfume de hombre quedó primero en los más queridos de 2010 según la noticia?"
+  ],
+  "impossible_unrelated": [
+    "¿Cuál es la capital de Mongolia?",
+    "¿Cómo se prepara una paella valenciana?",
+    "¿Cómo se entrena una red neuronal convolucional?",
+    "¿Quién ganó el Mundial de fútbol de 2014?",
+    "¿Cuál es la fórmula del teorema de Pitágoras?",
+    "¿Cómo se cambia el aceite de un coche?"
+  ],
+  "impossible_in_domain": [
+    "¿Cuánto cuesta Aventus de Creed?",
+    "¿Cuál es el aroma de Baccarat Rouge 540?",
+    "¿Quién creó Aventus?",
+    "¿Cuántos ml tiene el frasco de Sauvage Elixir?"
+  ]
+}

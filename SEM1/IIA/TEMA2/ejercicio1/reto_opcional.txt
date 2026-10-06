@@ -1,0 +1,26 @@
+##### 03_model_based_agent
+----------------------------------------
+Action: TurnLeft
+Step 200  Score -200.0  IN CAVE
+ 4 | G  W  .  > 
+ 3 | P  .  .  . 
+ 2 | .  .  .  . 
+ 1 | .  .  .  P 
+      1  2  3  4
+Percept [None]
+Reward -1  (max_steps)
+----------------------------------------
+Result: stopped without gold  steps=200  score=-200.0
+##### 04_goal_based_agent
+----------------------------------------
+Action: Climb
+Step 50  Score 940.0  CLIMBED
+ 4 | .  w  .  . 
+ 3 | P  .  .  . 
+ 2 | .  .  .  . 
+ 1 | .  .  .  P 
+      1  2  3  4
+Percept [None]
+Reward +999  (climbed_with_gold)
+----------------------------------------
+Result: climbed with gold  steps=50  score=940.0

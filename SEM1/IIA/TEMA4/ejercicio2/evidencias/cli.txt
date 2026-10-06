@@ -1,0 +1,35 @@
+$ python3 find_route.py --from-city Tijuana --to Cancún
+Heuristic: Haversine to destination (km)
+Algorithm: astar
+From:      Tijuana (Baja California)  (id 6)
+To:        Cancún (Quintana Roo)  (id 25)
+Status:    success
+Path:      Tijuana → Villa del Prado 2da Sección → Terrazas del Valle → Tecate → ... → Felipe Carrillo Puerto → Tulum → Playa del Carmen → Cancún
+Depth:     125 hops   Cost: 4528.20 km
+Expanded:  949   Generated: 4886
+
+$ python3 find_route.py --from-city "Mexico City" --to Monterrey
+Heuristic: Haversine to destination (km)
+Algorithm: astar
+From:      Mexico City (Mexico City)  (id 0)
+To:        Monterrey (Nuevo León)  (id 10)
+Status:    success
+Path:      Mexico City → Gustavo Adolfo Madero → Puerto Escondido (Tepeolulco Puerto Escondido) → Coacalco → ... → China → Cadereyta Jiménez → Jardines de la Silla (Jardines) → Monterrey
+Depth:     27 hops   Cost: 1041.87 km
+Expanded:  428   Generated: 2174
+
+$ python3 find_route.py --from-city Tijuana --to Cancún --algo ucs
+Path:      Tijuana → Villa del Prado 2da Sección → Terrazas del Valle → Tecate → ... → Felipe Carrillo Puerto → Tulum → Playa del Carmen → Cancún
+Depth:     125 hops   Cost: 4528.20 km
+Expanded:  998   Generated: 5123
+
+$ python3 find_route.py --from-city Puebla --to "Guadalupe, Nuevo León"
+AVISO: 'Puebla' es ambiguo (2 ciudades). Se eligió la más poblada: id 4, Puebla. Opciones: id 4 Puebla (pob. 1,434,062); id 580 Baja California (pob. 15,168). Desambigua con 'Nombre, Estado' o el id.
+Heuristic: Haversine to destination (km)
+Algorithm: astar
+From:      Puebla (Puebla)  (id 4)
+To:        Guadalupe (Nuevo León)  (id 22)
+Status:    success
+Path:      Puebla → Sanctorum → Almecatla → Xicohtzinco → ... → Camargo → China → Cadereyta Jiménez → Guadalupe
+Depth:     29 hops   Cost: 1115.25 km
+Expanded:  449   Generated: 2294

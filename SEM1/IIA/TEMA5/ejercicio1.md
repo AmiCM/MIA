@@ -149,16 +149,43 @@ No modifiques las notebooks originales del repositorio.
 
 ### 1. Enlaces
 
---
+Notebooks modificados (adjuntos en este folder):
+- `04 Multilayer perceptron.ipynb` (NumPy): al final, sección "Red más profunda (4 x 3 x 3 x 3 x 3)".
+- `05 Keras - multilayer perceptron - iris.ipynb` (Keras): al final, sección "Red más profunda en Keras".
+
+Enlace de Colab: --
 
 ### 2. Capturas
 
---
+Por tomar en Colab (Run all): curva de error de 04 (4x3x3 vs 4x3x3x3x3 en la misma gráfica), curva de loss de 05 (ídem) y los dos `model.summary()` de Keras (2 y 4 capas `Dense`).
 
 ### 3. Reporte
 
---
+**Resultados** (500 épocas, η = 0.03, sigmoide + MSE):
+
+| Implementación | Topología | Error / loss final | Accuracy | Tiempo |
+|---|---|---|---|---|
+| NumPy (semilla 2) | 4x3x3 | 0.057 | 0.967 | 4.0 s |
+| NumPy (semilla 2) | 4x3x3x3x3 | 0.669 | 0.333 | 7.4 s |
+| Keras | 4x3x3 | 0.222 | 0.567 | -- |
+| Keras | 4x3x3x3x3 | 0.222 | 0.500 | 28.5 s |
+
+Con 10 semillas en NumPy: 4x3x3 error medio 0.124 (8/10 llegan a 0.06), 4x3x3x3x3 error medio 0.425 (4/10 se quedan en 0.67, 2 en 0.39, 2 en 0.26–0.33 y sólo 2 llegan a ~0.09), accuracy medio 0.909 vs 0.619.
+
+**¿Bajar más el error al añadir dos capas, o se estancó / empeoró? ¿Igual en NumPy y en Keras?**
+Empeoró o se estancó en ambos. En NumPy la red profunda se queda en 0.669 durante casi todo el entrenamiento (en esta corrida nunca sale de ahí) mientras la de 4x3x3 baja a 0.057. En Keras ninguna baja de 0.222 en 500 épocas.
+
+**¿Las curvas de 01 y Keras se parecen con la misma topología?**
+No. NumPy converge a 0.057 y Keras queda en 0.222. Diferencias de implementación:
+- Keras usa `batch_size=32` por defecto: 5 actualizaciones por época contra 150 en NumPy (SGD por ejemplo), así que aprende aproximadamente 30 veces más lento.
+- El MSE de Keras es promedio sobre las 3 salidas y el de NumPy es suma, es decir, 0.222 en Keras equivale a 0.667 en NumPy.
+- Inicialización: Glorot en Keras y U(-0.5, 0.5) en NumPy.
+
+**Con sigmoides apiladas y MSE, ¿tiene sentido que una red más profunda no aprenda mejor en Iris?**
+Sí. El error 0.667 es el MSE de predecir 1/3 para las tres clases (la salida casi no depende de la entrada: [3,3,1,1] → [0.342, 0.339, 0.336]). Cada sigmoide multiplica el delta por h(1-h) ≤ 0.25, y con 4 capas el gradiente que llega a las primeras capas es muy pequeño (gradiente que se desvanece). Iris es un problema casi linealmente separable y una capa oculta de 3 neuronas basta; agregar capas sólo vuelve más difícil el entrenamiento.
+
+Nota: Se cambió np.random.rand(1) por np.random.rand() en 'generate_weights' porque la versión original de numpy lanza error.
 
 ### 4. Evidencias
 
---
+Por tomar: captura del entorno Colab / menú Runtime.
