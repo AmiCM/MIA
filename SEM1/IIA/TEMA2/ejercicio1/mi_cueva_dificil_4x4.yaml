@@ -1,0 +1,36 @@
+# Variante dificil: el Wumpus bloquea el unico camino seguro hacia el oro.
+# (1, 1) es la casilla inferior izquierda. El agente inicia ahi mirando al este.
+#
+#   4 | G  W  .  .
+#   3 | P  .  .  .
+#   2 | .  .  .  .
+#   1 | >  .  .  P
+#       1  2  3  4
+#
+# El oro (1,4) solo tiene dos accesos: (1,3), un pit, y (2,4), el Wumpus.
+# El unico camino seguro pasa por el Wumpus, hay que matarlo para abrirlo.
+
+grid:
+  width: 4
+  height: 4
+
+agent:
+  start: [1, 1]
+  direction: east
+  arrows: 1
+
+wumpus: [2, 4]
+
+pits:
+  - [1, 3]
+  - [4, 1]
+
+gold: [1, 4]
+
+scoring:
+  gold: 1000
+  death: -1000
+  step: -1
+  shoot: -10
+
+max_steps: 200

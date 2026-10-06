@@ -150,16 +150,27 @@ No modifiques la notebook original del repositorio.
 
 ### 1. Enlaces
 
---
+Notebook modificado adjunto en este folder: `13 YOLO ultralytics.ipynb` (sección "Predicción sobre una imagen propia")
+
+Enlace de Colab: --
 
 ### 2. Capturas
 
---
+Por tomar en Colab (GPU T4): `runs/detect/predict` (zidane), `runs/detect/train2` (bus) y las predicciones sobre mi foto (CLI y `model(...)`).
 
 ### 3. Reporte
 
---
+**¿Qué clases detectó YOLO en las fotos de Ultralytics y cuáles en la tuya?**
+- `zidane.jpg`: 2 `person`, 1 `tie`.
+- `bus.jpg`: 4 `person`, 1 `bus`, 1 `stop sign`.
+- Mi foto (`MI_FOTO`): -- (anotar clases y número de cajas que imprime la celda).
+
+**¿Algún objeto evidente de tu foto no salió etiquetado? ¿Por qué podría pasar?**
+-- (anotar el objeto). Causas posibles: la clase no está en COCO (80 clases), objeto pequeño o parcialmente recortado, o confianza menor al umbral `conf=0.25`. Ejemplo con `bus.jpg` (CLI, `yolov8n.pt`): con `conf=0.25` detecta 4 `person` y 1 `bus`; con `conf=0.7` quedan 3 `person` y 1 `bus`.
+
+**¿La predicción de la celda CLI y la de `model(...)` coinciden sobre tu misma imagen?**
+-- Se espera que sí: ambas usan `yolov8n.pt` y el mismo umbral de 0.25. Una diferencia posible es que `model` ya pasó por las 3 épocas de entrenamiento en `coco128`, mientras que el CLI usa los pesos originales, por lo que las confianzas y alguna caja pueden variar (en `bus.jpg` el modelo entrenado detectó además 1 `stop sign`).
 
 ### 4. Evidencias
 
---
+Por tomar: captura del entorno Colab / menú Runtime con GPU.
