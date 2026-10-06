@@ -146,3 +146,19 @@ No modifiques las notebooks originales del repositorio.
 - La última capa debe tener **3** neuronas: `Y` es one-hot de 3 clases.
 
 ## Solución
+
+### 1. Enlaces
+
+--
+
+### 2. Capturas
+
+--
+
+### 3. Reporte
+
+--
+
+### 4. Evidencias
+
+--

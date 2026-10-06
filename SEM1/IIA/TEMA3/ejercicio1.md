@@ -138,9 +138,9 @@ Se elige **Lugoj → Hirsova**, donde existe un único camino que conecta ambas 
 Lugoj (70km) -> Mehadia (75km) -> Drobeta (120km) -> Craiova (138km) -> Pitesti (101km) -> Bucharest (85km) -> Urziceni (98km) -> Hirsova
 ```
 
-En resumen, el camino encontrado por BFS, UCS, DFS, DLS(limit=7) e IDS fue el mismo, sumando 687km: 
-
 ### 2. Tabla comparativa
+
+En resumen, el camino encontrado por BFS, UCS, DFS, DLS(limit=7) e IDS fue el mismo, sumando 687km:
 
 | Algoritmo       | Status  | Path (resumen)          | Depth (hops)  | Cost (km) | Expanded  | Generated |
 |-----------------|---------|-------------------------|---------------|-----------|-----------|-----------|
@@ -151,49 +151,6 @@ En resumen, el camino encontrado por BFS, UCS, DFS, DLS(limit=7) e IDS fue el mi
 | DLS (limit 7)   | success | MISMA SOLUCION          | 7             | 687       | 9         | 16        |
 | IDS             | success | MISMA SOLUCION          | 7             | 687       | 63        | 162       |
  
-Resultados al ejecutar:
-`pixi run python 02_breadth_first_search.py --from-city Lugoj --to Hirsova`
-```
-=== BFS ===
-Status:    success
-Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
-Depth:     7 roads   Cost: 687 km   Expanded: 15   Generated: 38
-```
-`pixi run python 03_uniform_cost_search.py --from-city Lugoj --to Hirsova`
-```
-=== UCS ===
-Status:    success
-Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
-Depth:     7 roads   Cost: 687 km   Expanded: 15   Generated: 39
-```
-`pixi run python 04_depth_first_search.py --from-city Lugoj --to Hirsova`
-```
-=== DFS ===
-Status:    success
-Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
-Depth:     7 roads   Cost: 687 km   Expanded: 13   Generated: 34
-```
-`pixi run python 05_depth_limited_search.py --from-city Lugoj --to Hirsova --limit 4`
-```
-=== DLS --limit 4 ===
-Status:    cutoff
-Expanded:  8   Generated: 21
-```
-`pixi run python 05_depth_limited_search.py --from-city Lugoj --to Hirsova --limit 7`
-```
-=== DLS --limit 7 ===
-Status:    success
-Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
-Depth:   ` 7 roads   Cost: 687 km   Expanded: 9   Generated: 16
-```
-`pixi run python 06_iterative_deepening_search.py --from-city Lugoj --to Hirsova`
-```
-=== IDS ===
-Status:    success   (last_limit=7)
-Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
-Depth:     7 roads   Cost: 687 km   Expanded: 63   Generated: 162
-```
-
 ### 3. Reporte de resultados
 
 **¿BFS encontró el camino con menos carreteras? ¿UCS el de menos km?**
@@ -219,3 +176,48 @@ DLS solo puede tener éxito cuando `limit ≥ profundidad de la solución más s
 
 La relación entre los tres algoritmos es la expansión. IDS expande muchos más nodos en total que BFS ya que siempre halla la solución BFS pero reexpandiendo los nodos superficales.
 
+### 4. Evidencias
+
+Se adjuntan los resultados obtenidos directamente de un logger del terminal:
+
+`pixi run python 01_breadth_first_search.py --from-city Lugoj --to Hirsova`
+```
+=== BFS ===
+Status:    success
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:     6 roads   Cost: 687 km   Expanded: 15   Generated: 38
+```
+`pixi run python 02_uniform_cost_search.py --from-city Lugoj --to Hirsova`
+```
+=== UCS ===
+Status:    success
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:     6 roads   Cost: 687 km   Expanded: 15   Generated: 39
+```
+`pixi run python 03_depth_first_search.py --from-city Lugoj --to Hirsova`
+```
+=== DFS ===
+Status:    success
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:     6 roads   Cost: 687 km   Expanded: 13   Generated: 34
+```
+`pixi run python 04_depth_limited_search.py --from-city Lugoj --to Hirsova --limit 4`
+```
+=== DLS --limit 3 ===
+Status:    cutoff
+Expanded:  7   Generated: 21
+```
+`pixi run python 04_depth_limited_search.py --from-city Lugoj --to Hirsova --limit 7`
+```
+=== DLS --limit 6 ===
+Status:    success
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:   ` 6 roads   Cost: 687 km   Expanded: 9   Generated: 16
+```
+`pixi run python 05_iterative_deepening_search.py --from-city Lugoj --to Hirsova`
+```
+=== IDS ===
+Status:    success   (last_limit=6)
+Path:      Lugoj → Mehadia → Drobeta → Craiova → Pitesti → Bucharest → Urziceni → Hirsova
+Depth:     6 roads   Cost: 687 km   Expanded: 63   Generated: 162
+```

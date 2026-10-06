@@ -133,9 +133,12 @@ python 06_learning_agent.py --episodes 1500 --config config/mi_cueva_4x4.yaml
   dificultad.
 
 ## Solución
-1. Adjunto en este folder
+### 1. Archivo
+
+Adjunto en este folder.
    
-2. La imagen con codiciones iniciales quedaría así:
+### 2. Diagrama ASCII
+
 Step 0  Score 0  IN CAVE
  4 | W  .  .  . 
  3 | G  .  P  . 
@@ -146,19 +149,26 @@ Percept [Breeze]
 
 Legend: >^v< agent  P pit  W wumpus  w dead wumpus  G gold  . empty  ## wall
 
-3. Respondiendo las preguntas:
+### 3. Reporte
 
-   - **¿Qué agentes lograron salir con el oro en tu mapa y cuáles no?**
-     Ninguno de los 4 agentes automáticos logró salir con el oro. Observé comportamiento idéntico al intentar bloquear el oro con el Wumpus. Para probar que dicho mapa tenía solución, utilicé una ejecución manual con teclado. (Adjunto en solucion.txt)
+Respondiendo a las preguntas:
 
-   - **¿Por qué el agente de reflejo simple falla (o tiene suerte) en tu diseño?**
-     Porque este modelo de agente siempre está detectando 'Breeze' lo que significa que siempre va a estar rotando sin moverse, por ser su única casilla "segura". Como diseñé mi mapa estilo laberinto, esto hace que el agente siempre necesite calcular bien cada movimiento. Al poner pocos pits como en el ejemplo original, se vuelve mucho más sencillo para este agente el 'tener suerte' en la solución.
+  - **¿Qué agentes lograron salir con el oro en tu mapa y cuáles no?**
+    Ninguno de los 4 agentes automáticos logró salir con el oro. Observé comportamiento idéntico al intentar bloquear el oro con el Wumpus. Para probar que dicho mapa tenía solución, utilicé una ejecución manual con teclado. (Adjunto en solucion.txt)
 
-   - **¿Cómo cambia el resultado del agente basado en modelo si acercas o alejas un pit de la casilla inicial?**
-     En general, mientras más pits existen, más propenso es el agente a quedarse estancado al inicio o en algún punto intermedio. Sólo los modelos de utility o learning pueden avanzar con relativa seguridad ya que parecen tener menor aversión al riesgo (se arriesgan más a morir pero se arriesgan más a ganar, lo que incrementa su probabilidad de éxito.)
+  - **¿Por qué el agente de reflejo simple falla (o tiene suerte) en tu diseño?**
+    Porque este modelo de agente siempre está detectando 'Breeze' lo que significa que siempre va a estar rotando sin moverse, por ser su única casilla "segura". Como diseñé mi mapa estilo laberinto, esto hace que el agente siempre necesite calcular bien cada movimiento. Al poner pocos pits como en el ejemplo original, se vuelve mucho más sencillo para este agente el 'tener suerte' en la solución.
 
-     - **Si acerco aún más un pit** El bloqueo se queda o empeora, ya que no tiene la seguridad suficiente para avanzar a otra casilla.
-     - **Si alejo el pit** Probado diferentes combinaciones, el agente puede avanzar libremente hasta volver a quedarse atorado, o en algunos casos, consigue la seguridad suficiente para encontrar el oro y escapar satisfactoriamente, pero depende mucho el modelo que use.
+  - **¿Cómo cambia el resultado del agente basado en modelo si acercas o alejas un pit de la casilla inicial?**
+    En general, mientras más pits existen, más propenso es el agente a quedarse estancado al inicio o en algún punto intermedio. Sólo los modelos de utility o learning pueden avanzar con relativa seguridad ya que parecen tener menor aversión al riesgo (se arriesgan más a morir pero se arriesgan más a ganar, lo que incrementa su probabilidad de éxito.)
+
+    - **Si acerco aún más un pit** El bloqueo se queda o empeora, ya que no tiene la seguridad suficiente para avanzar a otra casilla.
+    - **Si alejo el pit** Probado diferentes combinaciones, el agente puede avanzar libremente hasta volver a quedarse atorado, o en algunos casos, consigue la seguridad suficiente para encontrar el oro y escapar satisfactoriamente, pero depende mucho el modelo que use.
    
-4. Evidencias adjuntas en intentos.txt para las ejecuciones de agente y en solucion.txt para mi ejecución manual que muestra que el mapa era válido y con solución.
+### 4. Evidencias
 
+Adjuntas en intentos.txt para las ejecuciones de agente y en solucion.txt para mi ejecución manual que muestra que el mapa era válido y con solución.
+
+### 5. Reto opcional
+
+--

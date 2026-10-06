@@ -190,10 +190,7 @@ El subgrafo queda de la siguiente manera: (Greedy arriba y A* abajo)
 Oradea (h=513) (151km) -> Sibiu(h=391)                                                            -> Bucharest (h=166) -> Urziceni (h=120) (98km) -> Hirsova (h=64) (86km) -> Eforie (h=0)
                               |                                                                   |
                               - (80km) -> Rimnicu Vilcea(h=349) (97km) -> Pitesti (h=253) (101km) -
-
-
 ```
-
 
 ### 2. Tabla comparativa
 
@@ -201,6 +198,23 @@ Oradea (h=513) (151km) -> Sibiu(h=391)                                          
 |-----------|---------|-----------------------------------------------------------------------|-------|-----------|-----------|-----------|
 | Greedy    | success | Oradea→Sibiu→Fagaras→Bucharest→Urziceni→Hirsova→Eforie                | 6     | 730       | 6         | 18        |
 | A*        | success | Oradea→Sibiu→Rimnicu Vilcea→Pitesti→Bucharest→Urziceni→Hirsova→Eforie | 7     | 698       | 11        | 32        |
+
+### 3. Reporte de resultados
+
+**¿A* encontró el camino de menos km? ¿Greedy coincidió o se desvió?**
+Para A* sí, con 698 km. Por otro lado, Greedy se desvía y paga 730 km a cambio de una carretera menos.
+En Sibiu, Greedy elige Fagaras sobre Rimnicu Vilcea por tener menos hops, ignorando que el tramo por Fagaras hasta Bucharest es más caro en kilómetros.
+
+**¿Por qué Greedy puede devolver un camino más caro aunque h sea admisible?**
+Greedy ordena la frontera solo por h e ignora el costo acumulado (g): se mueve según su cercanía en línea recta (distancia euclidiana) sin medir cuánto cuesta
+llegar ahí. Que h sea admisible solo garantiza que no siempre quiera escoger el primer camino.
+
+**¿f no decrece en el camino de A*?**
+Según los logs de A*, f va: 513, 542, 580, 581, 595, 634, 676, 698. Es decir, no decrece.
+Esto se debe a que cumple la desigualdad del triángulo, por lo que f nunca puede bajar de un nodo a su hijo; por eso A*
+se expande en orden de f (creciente) y el primer Eforie que saca de la frontera ya está el optimizado.
+
+### 4. Evidencias
 
 Heurística usada por ambos: Distancia euclidiana.
 
@@ -239,18 +253,3 @@ Depth:     7 roads   Cost: 698 km
 
 Expanded: 11   Generated: 32
 ```
-
-### 3. Reporte de resultados
-
-**¿A* encontró el camino de menos km? ¿Greedy coincidió o se desvió?**
-Para A* sí, con 698 km. Por otro lado, Greedy se desvía y paga 730 km a cambio de una carretera menos.
-En Sibiu, Greedy elige Fagaras sobre Rimnicu Vilcea por tener menos hops, ignorando que el tramo por Fagaras hasta Bucharest es más caro en kilómetros.
-
-**¿Por qué Greedy puede devolver un camino más caro aunque h sea admisible?**
-Greedy ordena la frontera solo por h e ignora el costo acumulado (g): se mueve según su cercanía en línea recta (distancia euclidiana) sin medir cuánto cuesta
-llegar ahí. Que h sea admisible solo garantiza que no siempre quiera escoger el primer camino.
-
-**¿f no decrece en el camino de A*?**
-Según los logs de A*, f va: 513, 542, 580, 581, 595, 634, 676, 698. Es decir, no decrece.
-Esto se debe a que cumple la desigualdad del triángulo, por lo que f nunca puede bajar de un nodo a su hijo; por eso A*
-se expande en orden de f (creciente) y el primer Eforie que saca de la frontera ya está el optimizado.
