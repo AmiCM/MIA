@@ -1,0 +1,35 @@
+{
+  "config": {
+    "batch_name": "Exercise 8",
+    "threshold": 0.9,
+    "max_records": 10
+  },
+  "accepted": [
+    {
+      "text": "great",
+      "label": "positive",
+      "score": 0.95,
+      "source": null
+    },
+    {
+      "text": "fine",
+      "label": "neutral",
+      "score": 0.4,
+      "source": null
+    }
+  ],
+  "issues": [
+    {
+      "position": 2,
+      "field": "label",
+      "message": "Input should be 'positive', 'neutral' or 'negative'",
+      "error_type": "literal_error"
+    },
+    {
+      "position": 2,
+      "field": "score",
+      "message": "Input should be less than or equal to 1",
+      "error_type": "less_than_equal"
+    }
+  ]
+}

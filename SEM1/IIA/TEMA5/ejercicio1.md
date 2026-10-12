@@ -153,7 +153,9 @@ Notebooks modificados (adjuntos en este folder):
 - `04 Multilayer perceptron.ipynb` (NumPy): al final, sección "Red más profunda (4 x 3 x 3 x 3 x 3)".
 - `05 Keras - multilayer perceptron - iris.ipynb` (Keras): al final, sección "Red más profunda en Keras".
 
-Enlace de Colab: --
+Enlaces de Colab:
+  - https://drive.google.com/file/d/1ATfm0CJqu4bzBQCHOsS-FVS7-ma4EVfe/view?usp=sharing
+  - https://drive.google.com/file/d/1nIwudRvdKraa9wYzVR_v1W1m3xk7wHNb/view?usp=sharing
 
 ### 2. Capturas
 
