@@ -17,9 +17,9 @@ python3 find_route.py --from-city Tijuana --to Cancún
 python3 find_route.py --from-city Puebla --to "Guadalupe, Nuevo León"
 ```
 
-- `--algo astar|ucs|greedy`: algoritmo (default `astar`).
+- `--algo astar|ucs|greedy`: algoritmo.
 - `--full`: imprime el camino completo.
-- Nombres repetidos: se desambigua con `"Nombre, Estado"` o el id. Si es ambiguo, se elige la más poblada y se avisa en la salida.
+- Nombres repetidos: se desambigua con "Nombre, Estado" o el id, y si es ambiguo, se elige la más poblada y se notifica en la salida.
 
 ## Mapa
 
