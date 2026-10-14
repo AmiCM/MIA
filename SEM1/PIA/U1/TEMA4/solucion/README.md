@@ -1,15 +1,15 @@
-# Catálogo de cursos con MCP · Solución de la práctica
+# Catálogo de cursos con MCP · Solución
 
 Una función consulta `data/courses.json`. `main.py` la usa desde la terminal y
-`server.py` la expone como herramienta MCP mediante stdio. Este proyecto parte del
-[proyecto de referencia](../project/README.md) e incorpora lo que piden los ejercicios:
+`server.py` la expone como herramienta MCP mediante stdio.
 
-| Cambio | Archivo |
+| Cambio                                                    | Archivo                   |
 |---|---|
-| Catálogo ampliado con un tercer curso de Python (`PY03`) | `data/extra_courses.json` |
-| Mensaje INFO con total de cursos leídos y coincidencias | `catalog/search.py` |
-| Respuestas y evidencia de los ejercicios 1–7 | `README.md` (este archivo) |
+| Catálogo ampliado con un tercer curso de Python (`PY03`)  | `data/extra_courses.json` |
+| Mensaje INFO con total de cursos leídos y coincidencias   | `catalog/search.py`       |
+| Respuestas y evidencia de los ejercicios 1–7              | `README.md`               |
 
+Ejecuta:
 ```bash
 uv sync --locked
 uv run --locked python main.py python
@@ -18,9 +18,7 @@ uv run --locked python client.py python
 make check
 ```
 
-Toda la evidencia es salida real de terminal (Linux, uv 0.11.12, CPython 3.13.13). Las
-rutas absolutas de los tracebacks se abreviaron como `…/`. Cada bloque termina con
-el código de salida, obtenido con `echo $?`.
+NOTA: Las rutas absolutas de los tracebacks se abreviaron como `…/`.
 
 ---
 
@@ -42,13 +40,10 @@ __name__ of the module: server
 ```
 
 **¿Por qué `import main` no consulta el catálogo?** Importar un módulo ejecuta su código
-de nivel superior: los `import` y la **definición** de `main()`. Pero ninguna línea de
-nivel superior **llama** a `main()`: la llamada está dentro de
-`if __name__ == "__main__":`. Al importar, `__name__` vale `"main"` (el nombre del
-módulo), no `"__main__"`, así que la condición es falsa. No se imprime nada y el código de
-salida es 0. Sólo `python main.py` hace que el módulo se ejecute como `__main__`.
+de nivel superior, es decir lo que se encuentra en el archivo base ejecutado, todo lo que no esté bajo el archivo base ejecutado y que esté bajo el
+`if __name__ == "__main__":` No será ejecutado hasta que sea explícitamente llamado o será mostrado en caso de error para el Traceback.
 
-**¿Qué impide iniciar el transporte al importar `server.py`?** La misma condición final:
+**¿Qué impide iniciar el transporte al importar `server.py`?** La misma condición __name__=='__main__' antes señalada:
 
 ```python
 if __name__ == "__main__":
@@ -57,12 +52,11 @@ if __name__ == "__main__":
 ```
 
 **Registrar frente a iniciar.** Al importar `server` se ejecutan
-`mcp = MCPServer(...)` y el decorador `@mcp.tool()`. **Registrar** la herramienta añade
+`mcp = MCPServer(...)` y el decorador `@mcp.tool()`. Al "registrar" la herramienta, esta añade
 `find_courses` a la tabla de herramientas del servidor, con su descripción generada a
-partir de las anotaciones y del docstring. Por eso `list_tools()` la muestra sin que
+partir de las anotaciones y del docstring, de ahí que `list_tools()` la muestra sin que
 haya un servidor en marcha. **Iniciar** el servidor (`mcp.run`) abre el transporte stdio
-y queda bloqueado esperando mensajes MCP por stdin. Eso sólo ocurre cuando
-`server.py` se ejecuta como programa, por ejemplo cuando lo lanza `client.py`.
+y queda bloqueado esperando mensajes MCP por stdin.
 
 ---
 
@@ -111,15 +105,15 @@ FileNotFoundError: [Errno 2] No such file or directory: 'data/missing.json'
 [exit code: 1]
 ```
 
-- Con `--catalog data/extra_courses.json` aparecen **tres** resultados (PY01, PY02 y
+- Con `--catalog data/extra_courses.json` aparecen tres resultados (PY01, PY02 y
   PY03). `ML01` no coincide porque su título no contiene «python».
 - Con una ruta inexistente, `search_courses` lanza `FileNotFoundError` (subclase de
   `OSError`). `main.py` la captura, la registra con traceback mediante
-  `logger.exception` y devuelve **código de salida 1**. Un archivo ausente es un error,
+  `logger.exception` y devuelve código de salida 1 o Exit code 1 (Error de ejecución). Como un archivo ausente es un error,
   no una búsqueda sin coincidencias.
 - La herramienta MCP no acepta `--catalog`: `find_courses` llama a
   `search_courses(query)` con `DEFAULT_CATALOG`. Por eso `client.py python` sigue
-  devolviendo dos cursos (ver ejercicio 5).
+  devolviendo dos cursos.
 
 ---
 
@@ -156,28 +150,27 @@ INFO | catalog.search | Search completed: 2 matches out of 3 courses read
 [exit code: 0]
 ```
 
-**Comparación de niveles.** DEBUG muestra la ruta leída y el resumen; INFO sólo el
-resumen; ERROR no muestra nada porque la consulta no falló. El nivel filtra mensajes
-por severidad: se muestran los de ese nivel o superior.
+**Comparación de niveles.** DEBUG muestra la ruta leída y el resumen mientras que INFO sólo el
+resumen y ERROR no muestra nada porque la consulta no falló. El nivel filtra mensajes
+por severidad.
 
 **¿Por qué el archivo conserva mensajes que no aparecen en consola?** En
-`configure_logging`, el logger raíz acepta desde DEBUG y cada **handler** aplica su propio
+`configure_logging`, el logger raíz acepta desde DEBUG y cada handler aplica su propio
 filtro. El handler de consola usa el nivel pedido (`ERROR`) y descarta DEBUG e INFO.
-El `FileHandler` está fijado en DEBUG y los guarda todos. Los mensajes son los mismos;
+Como el `FileHandler` está fijado en DEBUG entonces los guarda todos. Los mensajes son los mismos;
 cada destino decide cuáles conserva.
 
 **¿Por qué stdout se reserva al protocolo en `server.py`?** Con transporte stdio, el
 cliente y el servidor intercambian mensajes JSON-RPC por stdin/stdout. Cualquier texto
 ajeno escrito en stdout (un `print`, un log) se mezclaría con esos mensajes y el cliente
 no podría interpretarlos, lo que rompería la conexión. Por eso los logs van a stderr
-(`StreamHandler` usa stderr por defecto). Lo mismo ocurre en `main.py`, a menor escala:
-`result.json` contiene sólo el JSON y el log INFO se ve en la terminal.
+(`StreamHandler` usa stderr por defecto).
 
 ---
 
 ## Ejercicio 4 · Mejorar el diagnóstico
 
-Cambio en `catalog/search.py`, con argumentos de logging (`%d`) en lugar de una f-string,
+Cambio en `catalog/search.py`, con argumentos de logging en lugar de una f-string,
 para que el mensaje sólo se formatee si algún handler lo va a emitir:
 
 ```diff
@@ -195,7 +188,7 @@ Después: `INFO | catalog.search | Search completed: 2 matches out of 3 courses 
 **Mismos cursos por consulta directa y por MCP.** `python` → PY01 y PY02 en los dos casos.
 Compárese el JSON de `main.py python` (ejercicio 3) con el `structured_content` de
 `client.py python` (ejercicio 5). `astronomy` → `[]` en los dos. El cambio sólo
-afecta al log, no a la búsqueda. Las pruebas existentes siguen pasando (ejercicio 7).
+afecta al log, no a la búsqueda.
 
 ---
 
@@ -341,32 +334,21 @@ Tools: ['find_courses']
 La lista vacía es un resultado legítimo; el error indica que la operación falló. El
 servidor registra el detalle (`ValueError` con traceback) en su stderr y al cliente sólo
 le envía un `ToolError` con un mensaje genérico, sin exponer detalles internos. El
-servidor sigue atendiendo peticiones después del error: `tests/test_mcp.py` lo
-comprueba con otra consulta tras la inválida.
+servidor sigue atendiendo peticiones después del error: `tests/test_mcp.py`.
 
 **Qué aporta cada archivo de reproducción.**
 
-- `pyproject.toml`: nombre del proyecto, versión de Python compatible
-  (`requires-python >= 3.12`), dependencias directas con rangos (`mcp>=2,<3`,
-  `pydantic>=2,<3`), dependencias de desarrollo y configuración de Ruff y pytest. Describe
-  **qué** necesita el proyecto.
-- `uv.lock`: la resolución exacta de **todas** las dependencias, directas y transitivas
-  (43 paquetes), con versiones y hashes. `uv sync --locked` instala exactamente eso y
-  falla si `pyproject.toml` y el lockfile no coinciden. Así otra máquina obtiene el mismo
-  entorno.
-- `.python-version`: el intérprete con el que se trabaja (`3.13`). uv lo localiza o lo
-  descarga (aquí usó CPython 3.13.13).
-- **`.venv` no se entrega** porque es un artefacto derivado que uv reconstruye a partir de
-  los tres archivos anteriores. Además es grande, depende del sistema operativo y la
-  arquitectura (binarios compilados) y contiene rutas absolutas de la máquina donde se
-  creó, así que una copia no funcionaría de forma fiable en otro equipo. Está en
-  `.gitignore`, junto con cachés, `logs/` y `result.json`.
+- `pyproject.toml`: nombre del proyecto, versión de Python compatible, dependencias, configuración de Ruff y pytest. Describe
+  qué necesita el proyecto para correr adecuadamente (al menos hasta donde el dev puede comprobar).
+- `uv.lock`: Definición exacta de todas las dependencias, directas e indirectas con versiones y hashes. Si se necesita una librería para funcionar y alguna sub librería de la cual dependa etc.
+- `.python-version`: versión de python.
+- **`.venv` no se entrega** Porque uv lo maneja por nosotros (es uno de los motivos principales de usar uv).
 
 ---
 
 ## Ejercicio 6 · Corregir un aviso de Ruff
 
-Se añadió `import os` (sin usar), en orden alfabético, a `catalog/search.py`:
+Se añadió `import os` a `catalog/search.py` para validar el checker de ruff:
 
 ```console
 $ uv run --locked ruff check .
@@ -391,8 +373,7 @@ Found 1 error.
 [exit code: 1]
 ```
 
-**Corrección:** se eliminó la línea `import os` (equivale a lo que haría
-`ruff check --fix`):
+**Corrección:** se eliminó la línea `import os`:
 
 ```console
 $ uv run --locked ruff check .
@@ -401,14 +382,14 @@ All checks passed!
 ```
 
 Ruff marca **F401** porque un import sin usar es código muerto: añade una dependencia
-aparente y suele indicar un error, como un nombre que se pensaba usar.
+aparente y suele indicar un error.
 
 ---
 
 ## Ejercicio 7 · Comprobar desde una copia limpia
 
 Nueva copia limpia del proyecto final (sin `.venv` ni cachés), con las comprobaciones de
-[CALIDAD.md](../CALIDAD.md) sobre las pruebas existentes. No se añadieron pruebas.
+[CALIDAD.md](../CALIDAD.md) sobre las pruebas existentes sin pruebas ruff.
 
 ```console
 $ uv sync --locked
@@ -436,7 +417,7 @@ $ uv run --locked python -m pytest
 [exit code: 0]
 ```
 
-Lo mismo con el Makefile:
+Con el Makefile:
 
 ```console
 $ make check
@@ -461,20 +442,16 @@ incluyen como evidencia adicional.
 
 ### MCP Inspector (GUIA §7)
 
-Inspector requiere Node.js y `npx`. Sin permisos de administrador, Node.js puede
-instalarse a nivel de usuario con uv (`uv tool install nodejs-wheel` instala `node`,
-`npm` y `npx`).
 
-**Interfaz web** (interactiva). Abre la URL local que muestra, conecta por stdio y en
-*Tools* llama a `find_courses`:
+**Interfaz web** (interactiva). Abre la URL local que muestra, y llama a `find_courses`:
 
 ```bash
 npx @modelcontextprotocol/inspector uv run --locked python server.py
 ```
 
-**Modo CLI** (sin navegador), usado aquí para registrar la evidencia. El servidor se
+**Modo CLI** El servidor se
 describe con un archivo de configuración con el mismo formato que usan los hosts MCP. Así
-se prueba también el comando para un host de la GUIA §7:
+se prueba también el comando:
 `uv --directory /ruta/absoluta run --locked python server.py`. Para evitar que el
 Inspector interprete `--locked` como opción propia, uv se pasa en `args`:
 
@@ -571,8 +548,6 @@ $ npx -y @modelcontextprotocol/inspector --cli --config mcp.inspector.json --ser
 [exit code: 5]
 ```
 
-El JSON se compactó para facilitar la lectura; los valores no cambian. Inspector, un
-cliente distinto de `client.py`, obtiene lo mismo:
 - **La herramienta:** sólo `find_courses`, con un esquema de entrada y otro de salida
   generados a partir de las anotaciones (`query: str`, `list[Course]`) y el docstring. El
   esquema de salida incluye la restricción `hours > 0` del modelo `Course`.
@@ -580,12 +555,7 @@ cliente distinto de `client.py`, obtiene lo mismo:
   `astronomy` e `isError: true` para la cadena de espacios. En este último caso el
   Inspector termina con un código distinto de 0.
 
-### Versionado con Git y reproducción desde un clon (GUIA §8)
-
-Este proyecto está dentro del repositorio del curso (`MIA`), así que no se crea un
-repositorio anidado. La demostración se hizo en una **carpeta independiente**, fuera
-de ese repositorio, con una copia del proyecto. Antes se ejecutó una consulta para
-generar `.venv`, `logs/` y `result.json` y comprobar que no se versionan.
+Suponiendo uso de git: 
 
 ```console
 $ git init -q -b main && git status --short --untracked-files=all
@@ -665,14 +635,6 @@ Tools: ['find_courses']
   "is_error": false,
 [exit code: 0]
 ```
-
-Antes del commit se revisó qué se iba a guardar. `git status` muestra sólo código, datos
-de muestra, README, `.python-version`, `pyproject.toml`, `uv.lock` y `Makefile`. Los
-artefactos (`.venv/`, cachés, `logs/`, `result.json`) aparecen como ignorados (`!!`)
-gracias a `.gitignore`. El clon no trae `.venv`; `uv sync --locked` lo reconstruye a
-partir del lockfile y el cliente devuelve los mismos dos cursos.
-
----
 
 ## Archivos
 

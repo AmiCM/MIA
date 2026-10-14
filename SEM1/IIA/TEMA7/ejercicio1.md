@@ -155,17 +155,38 @@ No modifiques la notebook original del repositorio.
 
 ### 1. Enlace
 
-Notebook modificado adjunto en este folder: `01 K-medias.ipynb` (sección "Ejercicio 1 — Separar los blobs y volver a elegir k", al final).
-
-Enlace de Colab: --
+Enlace de Colab: https://drive.google.com/file/d/1K9mrW6nmpL2eQfgVCKI671riZ9qEwmrR/view?usp=sharing
 
 ### 2. Capturas
 
-Por tomar en Colab: la sección nueva genera las 4 figuras (scatter, Voronoi k = 5, codo, silueta) para la corrida **original** y para la **modificada** (8 figuras).
+Scatter original y nuevo:
+
+![Scatter original](scatter1.png)
+
+![Scatter nuevo](scatter2.png)
+
+Voronoi original y nuevo:
+
+![Voronoi original](voronoi1.png)
+
+![Voronoi nuevo](voronoi2.png)
+
+Elbow original y nuevo:
+
+![Elbow original](elbow1.png)
+
+![Elbow nuevo](elbow2.png)
+
+Silhouette original y nuevo:
+
+![Silhouette original](silhouette1.png)
+
+![Silhouette nuevo](silhouette2.png)
+
 
 ### 3. Centros
 
-Centros y `std` usados (`n_samples=2000`, `random_state=7`):
+Centros y std usados (n_samples=2000, random_state=7):
 
 ```python
 blob_centers = np.array(
@@ -177,7 +198,7 @@ blob_centers = np.array(
 blob_std = np.array([0.4, 0.3, 0.1, 0.1, 0.1])
 ```
 
-Los tres blobs de la izquierda se separan en vertical (1.5 de distancia entre centros, con `std = 0.1`); `blob_std` no cambia.
+Los tres blobs de la izquierda se separan en vertical (1.5 de distancia entre centros, std = 0.1).
 
 ```
 Original                          Modificado
@@ -200,13 +221,13 @@ Original                          Modificado
 | k con silueta máxima | 4 | 5 |
 
 **En los datos de Géron, ¿por qué el codo "prefiere" k = 4 si `make_blobs` usó 5 centros?**
-Los blobs de `(-2.8, 1.8)` y `(-2.8, 1.3)` (con `std = 0.1`) están a 0.5 de distancia y se tocan: k-means los trata como un solo grupo. Pasar de k = 4 a k = 5 sólo baja la inercia de 261.8 a 224.1 (poco), mientras que de k = 3 a k = 4 baja de 653.2 a 261.8: el codo queda en 4.
+Los blobs de (-2.8, 1.8) y (-2.8, 1.3) con std = 0.1 están a 0.5 de distancia y se tocan: k-means los trata como un solo grupo. Pasar de k = 4 a k = 5 sólo baja la inercia de 261.8 a 224.1, mientras que de k = 3 a k = 4 baja de 653.2 a 261.8 por lo que el codo queda en 4, ya que el cambio marginal es alto.
 
 **Con tus blobs separados, ¿el codo y la silueta coinciden en el mismo k? ¿Ese k es 5?**
-Sí, coinciden en k = 5. La inercia cae de 752.6 (k = 4) a 213.3 (k = 5) y después casi se aplana (170.9 en k = 6). La silueta es máxima en k = 5 (0.775 contra 0.695 en k = 4).
+Sí, coinciden en k = 5. La inercia cae de 752.6 con k = 4 a 213.3 con k = 5. Después el cambio es mínimo de 170.9 en k = 6. La silueta es máxima en k = 5 (0.775 contra 0.695 en k = 4).
 
 **Si el codo sigue en 4, ¿qué te falta mover?**
-No aplica, el codo ya está en 5. Si siguiera en 4 habría que aumentar la distancia entre centros respecto a `blob_std` (regla: distancia mayor a ~2(σi + σj)) o reducir `blob_std`.
+No aplica, el codo ya está en 5. Si siguiera en 4 habría que aumentar la distancia entre centros respecto a blob_std porque la regla sería de distancia mayor a ~2(σi + σj)) o reducir blob_std.
 
 **Reto opcional**
 - Centros de Géron con los tres `std = 0.1` subidos a `0.4`: inercias k = 3, 5, 8 de 941.9, 451.4, 329.2; la silueta es máxima en k = 2 (0.533, y baja a 0.395 en k = 5). Las nubes se funden aún más y el codo se desdibuja (no se mueve a 5): ensanchar los blobs empeora la separación igual o más que acercarlos.
@@ -214,4 +235,4 @@ No aplica, el codo ya está en 5. Si siguiera en 4 habría que aumentar la dista
 
 ### 5. Evidencia
 
-Por tomar: captura del entorno Colab / menú Runtime.
+![Evidence](evidencia.png)
