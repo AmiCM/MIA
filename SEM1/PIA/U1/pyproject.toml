@@ -1,0 +1,18 @@
+[project]
+name = "pia-u1"
+version = "0.1.0"
+description = "Entorno para ejecutar los ejercicios de la Unidad 1 de PIA (sesiones 1-3)"
+requires-python = ">=3.12"
+dependencies = [
+    # Sesión 2: mismas versiones que TEMA2/requirements.txt y la celda %pip de la notebook
+    "pydantic==2.12.5",
+    "mypy==1.19.1",
+    "email-validator==2.3.0",
+    "fastapi==0.141.1",
+    "httpx2==2.13.1",
+    # Kernel para ejecutar las notebooks en VS Code / Jupyter
+    "ipykernel",
+]
+
+[tool.uv]
+package = false

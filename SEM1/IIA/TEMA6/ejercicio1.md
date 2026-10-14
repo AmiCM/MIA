@@ -150,27 +150,37 @@ No modifiques la notebook original del repositorio.
 
 ### 1. Enlaces
 
-Notebook modificado adjunto en este folder: `13 YOLO ultralytics.ipynb` (sección "Predicción sobre una imagen propia")
-
-Enlace de Colab: --
+Enlace de Colab: https://drive.google.com/file/d/18HYAuGpMqzShyiuhm5jRPJeGdcfvGu-G/view?usp=sharing
 
 ### 2. Capturas
 
-Por tomar en Colab (GPU T4): `runs/detect/predict` (zidane), `runs/detect/train2` (bus) y las predicciones sobre mi foto (CLI y `model(...)`).
+Resultado de zidane.jpg:
+
+![Zidane result](./zidane.jpg)
+
+Resultado sobre bus.jpg:
+
+![Bus result](./bus.jpg)
+
+Resultado sobre yo.jpg:
+
+![Me result](./yo.jpg)
 
 ### 3. Reporte
 
 **¿Qué clases detectó YOLO en las fotos de Ultralytics y cuáles en la tuya?**
-- `zidane.jpg`: 2 `person`, 1 `tie`.
-- `bus.jpg`: 4 `person`, 1 `bus`, 1 `stop sign`.
-- Mi foto (`MI_FOTO`): -- (anotar clases y número de cajas que imprime la celda).
+- `zidane.jpg`: 2 person, 1 tie. Es decir, dos personas y una corbata
+- `bus.jpg`: 4 person, 1 bus, 1 stop sign. Es decir, 4 personas un autobùs y una señal de alto.
+- `yo.jpg`: 1 person, 1 bottle, 1 sandwich. Es decir, una persona, una botella y un sandwich.
 
 **¿Algún objeto evidente de tu foto no salió etiquetado? ¿Por qué podría pasar?**
--- (anotar el objeto). Causas posibles: la clase no está en COCO (80 clases), objeto pequeño o parcialmente recortado, o confianza menor al umbral `conf=0.25`. Ejemplo con `bus.jpg` (CLI, `yolov8n.pt`): con `conf=0.25` detecta 4 `person` y 1 `bus`; con `conf=0.7` quedan 3 `person` y 1 `bus`.
+- El perro: Sì lo detectó pero no decuadamente ya que lo catalogó como sándwich. El motivo más razonable es que no tiene una forma reconocible por un modelo de detección estándar, sumado a que la imagen es borrosa. Desconozco por qué en específico lo catalogó como sándwich.
 
 **¿La predicción de la celda CLI y la de `model(...)` coinciden sobre tu misma imagen?**
--- Se espera que sí: ambas usan `yolov8n.pt` y el mismo umbral de 0.25. Una diferencia posible es que `model` ya pasó por las 3 épocas de entrenamiento en `coco128`, mientras que el CLI usa los pesos originales, por lo que las confianzas y alguna caja pueden variar (en `bus.jpg` el modelo entrenado detectó además 1 `stop sign`).
+- No, el resultado del modelo es: 1 person, 1 bottle, 1 sandwich, 1 book, 1 teddy bear. Es decir, me lo catalogó como sándwich y como teddy bear a la vez. Esto puede deberse a una diferencia entre los entrenamientos o algún parámetro de entrenamiento/predicción distinto al CLI estándar.
 
 ### 4. Evidencias
 
-Por tomar: captura del entorno Colab / menú Runtime con GPU.
+Resultado de captura:
+
+![Evidence](./evidencia.png)

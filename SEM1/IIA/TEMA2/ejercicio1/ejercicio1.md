@@ -182,7 +182,7 @@ Archivo: `mi_cueva_dificil_4x4.yaml`
 ```
 
 - Wumpus `[2, 4]`, pits `[1, 3]` y `[4, 1]`, oro `[1, 4]`.
-- El oro tiene solo dos accesos: `(1,3)` (pit) y `(2,4)` (Wumpus). Sin el Wumpus el camino seguro existiría; con él, ninguna ruta segura llega al oro.
+- El oro tiene solo dos accesos: `(1,3)` (pit) y `(2,4)` (Wumpus). Sin el Wumpus el camino seguro existiría, pero como sí existe entonces ninguna ruta segura llega al oro.
 
 Resultados:
 
@@ -193,6 +193,6 @@ Resultados:
 | **Basado en metas** | Sale con oro, 50 pasos, +940                          |
 | Basado en utilidad  | Sale con oro, 48 pasos, +942                          |
 
-Por qué: el agente basado en modelo solo pisa casillas probadas como seguras. Cuando agota las casillas seguras sin ver el oro, no tiene más opciones y gira para siempre. Para el agente basado en metas, cuando su meta es inalcanzable por casillas seguras, deduce la posición única del Wumpus por el hedor (known_wumpus), se alinea y dispara, al morir el Wumpus (2,4) pasa a ser seguro, llega al oro y regresa a (1,1).
+Por qué: El agente basado en modelo solo pisa casillas probadas como seguras, y cuando se agotan las casillas seguras sin ver el oro empieza a girar para siempre. Para el agente basado en metas, cuando su meta es inalcanzable por casillas seguras entonces deduce la posición única del Wumpus por el hedor y dispara al Wumpus, para finalmente llegar al oro y regresar a (1,1).
 
-Nota: el agente de metas solo dispara si, al quedarse sin metas, está alineado con el Wumpus (misma fila/columna); no camina para alinearse. De muchas variantes, pocas cumplen "modelo falla, metas gana". Evidencia en reto_opcional.txt.
+Nota: el agente de metas solo dispara si, al quedarse sin metas, está alineado con el Wumpus. De hecho, pocas cumplen  que el algoritmo de modelo falla y el de metas gana. Evidencia adjunta en reto_opcional.txt.
